@@ -13,6 +13,7 @@ export class ListaPersonajesComponent implements OnInit {
   public page!: number;
   public search: string = '';
 
+
   constructor(private ApiService: ApiService) { }
 
   ngOnInit(): void {
@@ -22,15 +23,23 @@ export class ListaPersonajesComponent implements OnInit {
   llenarData() {
     this.ApiService.getData().subscribe( data => {
       this.data=data.results;
-      console.log(this.data);
+      //console.log(this.data);
     })
   }
 
   onSearchPersonaje( search: string ){
 
-    if( search.length === 0 )
     this.search= search;
-    console.log(search);
+
+    if( search.length === 0 ){
+
+      this.llenarData()
+      return;
+    }
+
+    this.ApiService.getDataFilter(search).subscribe ( data => {
+      this.data = data.results;
+    })
   }
 
 }
